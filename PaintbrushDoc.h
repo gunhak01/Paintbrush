@@ -1,6 +1,5 @@
 ﻿
 // PaintbrushDoc.h: CPaintbrushDoc 클래스의 인터페이스
-//
 
 
 #pragma once
@@ -9,6 +8,7 @@ using namespace std;
 
 class DrawShape {
 public:
+	bool check_bmp = false;
 	virtual void draw(CDC* dc) const = 0;
 };
 
@@ -49,7 +49,7 @@ public:
 
 	bool isClicked = false;
 
-	DrawBmp() { }
+	DrawBmp() { check_bmp = true; }
 
 	void rect_TopLeft(CPoint m_pt)
 	{

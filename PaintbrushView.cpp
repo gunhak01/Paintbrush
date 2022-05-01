@@ -144,6 +144,22 @@ void CPaintbrushView::OnLButtonDown(UINT nFlags, CPoint point)
 		static_cast<DrawCircle*>(pDoc->m_pDrawShape)->m_logPen(pDoc->m_logPen);
 		static_cast<DrawCircle*>(pDoc->m_pDrawShape)->circle_TopLeft(point);
 	}
+	else if (pDoc->m_mode == 0)
+	{
+		for (DrawShape* bmp : pDoc->m_arrayShape) {
+			if (bmp->check_bmp == true) {
+				DrawBmp* bmp2 = new DrawBmp;
+				bmp2 = (DrawBmp*)bmp;
+				CRect rect(bmp2->rect.right - 30, bmp2->rect.bottom - 30, bmp2->rect.right + 30, bmp2->rect.right + 30);
+				bmp2->isClicked = rect.PtInRect(point);
+
+				//if (bmp2.isClicked) {
+				//	m_pDrawBmp = &bmp;
+				//	break;
+				//}
+			}
+		}
+	}
 
 	SetCapture();
 
@@ -201,6 +217,23 @@ void CPaintbrushView::OnLButtonUp(UINT nFlags, CPoint point)
 		static_cast<DrawCircle*>(pDoc->m_pDrawShape)->circle_BottomRight(point);
 		pDoc->m_pDrawShape->draw(&dc);
 		pDoc->m_arrayShape.push_back(pDoc->m_pDrawShape);
+	}
+	else if (pDoc->m_mode == 0)
+	{
+		for (DrawShape* bmp : pDoc->m_arrayShape) 
+		{
+			if (bmp->check_bmp == true) {
+				DrawBmp* bmp2 = new DrawBmp;
+				bmp2 = (DrawBmp*)bmp;
+				if (bmp2->isClicked)
+				{
+					bmp2->rect.right = point.x;
+					bmp2->rect.bottom = point.y;
+					bmp2->isClicked = false;
+				}
+			}
+		}
+		pDoc->UpdateAllViews(NULL);
 	}
 
 	ReleaseCapture();
